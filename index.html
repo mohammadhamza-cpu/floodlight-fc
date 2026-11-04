@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#102838"><meta name="description" content="Floodlight FC: original offline 7-a-side stick football. Play against AI or a friend with keyboard and touch controls."><title>Floodlight FC — Arcade Football</title><link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"></head>
+<body><main id="app">
+<canvas id="pitch" tabindex="0" aria-label="Football pitch. P1 WASD, Space shoot or tackle, J pass, K dribble, left Shift sprint, Q switch. P2 arrows, Enter, O, I, right Shift, U. P pauses."></canvas>
+<header class="topbar"><a class="brand" href="#" id="brand" aria-label="Floodlight FC home"><span class="brand-icon">F<span>↗</span></span><span>FLOODLIGHT <b>FC</b><small>SMALL STICKS. BIG GAME.</small></span></a><nav><button id="help" aria-label="How to play">?</button><button id="sound" aria-pressed="false" aria-label="Enable sound">SOUND OFF</button><button id="pause" hidden>Ⅱ PAUSE</button></nav></header>
+<section id="hud" hidden aria-label="Scoreboard"><div class="club home"><i id="home-dot"></i><span id="home-name">HBR</span><small id="home-label">PLAYER 1</small></div><div class="score-center"><div class="score"><b id="score-home">0</b><span>:</span><b id="score-away">0</b></div><time id="clock">03:00</time></div><div class="club away"><i id="away-dot"></i><span id="away-name">EMB</span><small id="away-label">MEDIUM AI</small></div></section>
+<div id="banner" role="status"></div><div id="overlay"></div>
+<section id="touch-controls" hidden aria-label="On-screen game controls"><div class="joy-wrap"><div id="joystick" aria-label="Drag joystick to move"><div class="joy-cross"></div><div id="stick"></div></div><span>MOVE</span></div><div class="actions"><button data-action="switch" class="switch">SWITCH <small>Q</small></button><div class="action-grid"><button data-action="dribble">DRIBBLE <small>K</small></button><button data-action="shoot" class="shoot">SHOOT <small>SPACE</small></button><button data-action="sprint" class="sprint">SPRINT <small>SHIFT</small></button><button data-action="pass" class="pass">PASS <small>J</small></button></div></div></section>
+<footer id="control-guide">7-A-SIDE · ORIGINAL ARCADE FOOTBALL · PLAY OFFLINE</footer>
+<noscript>Please enable JavaScript to play Floodlight FC.</noscript>
+</main>
+<script src="js/physics.js"></script><script src="js/ai.js"></script><script src="js/rules.js"></script><script src="js/engine.js"></script><script src="js/renderer.js"></script><script src="js/audio.js"></script><script src="js/controls.js"></script><script src="js/game.js"></script>
+</body></html>
