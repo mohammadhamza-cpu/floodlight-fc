@@ -55,6 +55,10 @@ The successful run recorded no page JavaScript/console errors and no network
 requests. Real keyboard events and emulated multi-touch exercised movement,
 actions, penalties, scoring, clock, pause and restart.
 
+The public GitHub Pages game also passed the 70 engine tests, 84 browser-run
+checks and six complete seeded matches, with no page JavaScript/console errors
+or off-site resource requests in the successful hosted run.
+
 These were automated tests in Google Chrome. Mobile checks used device emulation,
 not physical phones; sound was inspected programmatically, not listened to. This
 does not establish compatibility with every device/browser or keyboard rollover.

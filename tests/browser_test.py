@@ -121,8 +121,10 @@ def main():
                 c.js(f'neutral();{G}.players.forEach(p=>p.stun=10);{G}.scores=[0,0];Object.assign({G}.ball,{{x:51,y:0,z:.5,vx:40,lastTeam:0}})');c.wait(f'{G}.scores[0]===1')
                 check('Goal crossing updates score and celebrates',c.js(f'{G}.phase==="goal"&&{G}.players[5].celebrate>0&&document.querySelector("#score-home").textContent==="1"'))
                 c.screenshot(ART/'goal-celebration.png');c.wait(f'{G}.phase==="kickoff"');check('Automatic reset gives conceding team kickoff',c.js(f'{G}.player({G}.ball.owner).team===1'))
-                c.js(f'neutral();{G}.players.forEach(p=>p.stun=10);Object.assign({G}.players[7],{{x:49,y:0,stun:0}});Object.assign({G}.ball,{{x:46.5,y:0,z:1,vx:45,lastTeam:0,kind:"shoot"}})');saves=c.js(f'{G}.stats.saves[1]');c.wait(f'{G}.stats.saves[1]>{saves}');check('Keeper makes save during live physics',c.js(f'{G}.ball.owner===7&&{G}.players[7].dive>0'))
-                passes=c.js(f'{G}.stats.passes[1]');c.wait(f'{G}.stats.passes[1]>{passes}');check('Keeper distributes after catching',True)
+                # Snapshot counters in the same JS task as the fixture: a fast
+                # save must not occur before a separate baseline read arrives.
+                saves,passes=c.js(f'(()=>{{neutral();{G}.players.forEach(p=>p.stun=10);Object.assign({G}.players[7],{{x:49,y:0,stun:0}});Object.assign({G}.ball,{{x:46.5,y:0,z:1,vx:45,lastTeam:0,kind:"shoot"}});return [{G}.stats.saves[1],{G}.stats.passes[1]]}})()');c.wait(f'{G}.stats.saves[1]>{saves}');check('Keeper makes save during live physics',c.js(f'{G}.ball.owner===7&&{G}.players[7].dive>0'))
+                c.wait(f'{G}.stats.passes[1]>{passes}');check('Keeper distributes after catching',True)
                 c.click('#pause');c.click('#main-menu');c.click('[data-level="hard"]');check('Difficulty selection persists',c.js('Floodlight.config.difficulty==="hard"&&document.querySelector("[data-level=hard]").getAttribute("aria-pressed")==="true"'))
                 c.js("document.querySelector('#home-team').value='2';document.querySelector('#home-team').dispatchEvent(new Event('change',{bubbles:true}));");check('Home team selection updates kit identity',c.js('Floodlight.config.home===2&&Floodlight.renderer.teams[0].short==="VIO"'))
                 c.js("document.querySelector('#away-team').value='2';document.querySelector('#away-team').dispatchEvent(new Event('change',{bubbles:true}));");check('Duplicate kits automatically select distinct opposing team',c.js('Floodlight.config.home!==Floodlight.config.away'))
