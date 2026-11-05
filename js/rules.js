@@ -1,6 +1,6 @@
 /* Swept whole-ball goal detection, solid posts/crossbar and ball-out restarts.
- * Arcade rules: no offside, no cards, draws stand. Reckless in-box challenges
- * cause a penalty; other fouls cause a free kick. No sudden-death shootout. */
+ * Arcade rules: no offside, no cards, draws stand. Reckless slide challenges
+ * in the box cause a penalty; other slide fouls cause a free kick. */
 (function(F){
   'use strict';
   F.checkBoundary=function(g,old){
@@ -29,8 +29,8 @@
     }
     if(Math.abs(b.x)>C.halfX+C.ballR){
       const defending=b.x<0?0:1;
-      if(b.lastTeam===defending)g.restart('corner',1-defending,{x:Math.sign(b.x)*50.3,y:Math.sign(b.y||1)*32});
-      else g.restart('goal kick',defending,{x:Math.sign(b.x)*45,y:0});
-    }else if(Math.abs(b.y)>C.halfY+C.ballR){g.restart('throw in',1-b.lastTeam,{x:F.clamp(b.x,-48,48),y:Math.sign(b.y)*32});}
+      if(b.lastTeam===defending)g.restart('corner',1-defending,{x:Math.sign(b.x)*(C.halfX-1.7),y:Math.sign(b.y||1)*(C.halfY-2)});
+      else g.restart('goal kick',defending,{x:Math.sign(b.x)*(C.halfX-7),y:0});
+    }else if(Math.abs(b.y)>C.halfY+C.ballR){g.restart('throw in',1-b.lastTeam,{x:F.clamp(b.x,-C.halfX+4,C.halfX-4),y:Math.sign(b.y)*(C.halfY-2)});}
   };
 })(globalThis.Football);

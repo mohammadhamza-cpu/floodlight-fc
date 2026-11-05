@@ -1,9 +1,10 @@
 /* Keyboard and multi-pointer touch input. Edges are consumed once per physics
- * tick; held sprint/dribble and analog joystick are continuous. Cancellation,
+ * tick; shoot additionally reports a live held state so the engine can charge
+ * shots. P1 pass moved J->E and dribble K->F to sit beside WASD. Cancellation,
  * blur and pause discard input, never synthesize a shot. */
 (function(F){
   'use strict';
-  const maps=[{up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',shoot:'Space',pass:'KeyJ',dribble:'KeyK',sprint:'ShiftLeft',switch:'KeyQ'},
+  const maps=[{up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD',shoot:'Space',pass:'KeyE',dribble:'KeyF',sprint:'ShiftLeft',switch:'KeyQ'},
     {up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight',shoot:'Enter',pass:'KeyO',dribble:'KeyI',sprint:'ShiftRight',switch:'KeyU'}];
   F.Controls=class{
     constructor(canvas,{active,pause,unlock}){
@@ -33,9 +34,13 @@
     sample(){
       const result=maps.map((m,team)=>{const held=a=>this.keys.has(m[a])||(team===0&&[...this.pointers.values()].includes(a));
         const edge=a=>this.edges.has(m[a])||(team===0&&this.edges.has('touch-'+a));
-        return {x:(held('right')?1:0)-(held('left')?1:0)+(team===0?this.axis.x:0),y:(held('down')?1:0)-(held('up')?1:0)+(team===0?this.axis.y:0),shoot:edge('shoot'),pass:edge('pass'),switch:edge('switch'),dribble:held('dribble'),sprint:held('sprint')};});
+        return {x:(held('right')?1:0)-(held('left')?1:0)+(team===0?this.axis.x:0),y:(held('down')?1:0)-(held('up')?1:0)+(team===0?this.axis.y:0),shoot:edge('shoot'),shootHeld:held('shoot'),pass:edge('pass'),switch:edge('switch'),dribble:held('dribble'),sprint:held('sprint')};});
       if(this.mode==='ai'){
-        result[0].x+=result[1].x;result[0].y+=result[1].y;result[1]=F.emptyInput();
+        result[0].x+=result[1].x;result[0].y+=result[1].y;
+        result[0].shoot=result[0].shoot||result[1].shoot;result[0].shootHeld=result[0].shootHeld||result[1].shootHeld;
+        result[0].pass=result[0].pass||result[1].pass;result[0].switch=result[0].switch||result[1].switch;
+        result[0].dribble=result[0].dribble||result[1].dribble;result[0].sprint=result[0].sprint||result[1].sprint;
+        result[1]=F.emptyInput();
       }
       this.edges.clear();return result;
     }
